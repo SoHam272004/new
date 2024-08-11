@@ -1,5 +1,8 @@
 python
-# Riddle App
+# Riddle App with Streamlit
+
+import streamlit as st
+import random
 
 # List of riddles and their answers
 riddles = [
@@ -11,19 +14,31 @@ riddles = [
 
 def play_riddle_game():
     score = 0
-    for riddle in riddles:
-        print(f"Riddle: {riddle['riddle']}")
-        user_answer = input("Your answer: ")
-        if user_answer.lower() == riddle["answer"].lower():
-            print("Correct!")
-            score += 1
-        else:
-            print(f"Sorry, the correct answer is {riddle['answer']}")
-    print(f"Your final score is {score} out of {len(riddles)}")
+    riddle_count = len(riddles)
+    random_riddles = random.sample(riddles, riddle_count)
+
+    for i, riddle in enumerate(random_riddles, start=1):
+        st.write(f"Riddle {i} of {riddle_count}:")
+        st.write(riddle["riddle"])
+        user_answer = st.text_input("Your answer: ")
+
+        if st.button("Submit"):
+            if user_answer.lower() == riddle["answer"].lower():
+                st.write("Correct!")
+                score += 1
+            else:
+                st.write(f"Sorry, the correct answer is {riddle['answer']}")
+            st.write("")  # Add a blank line for readability
+
+    st.write(f"Your final score is {score} out of {riddle_count}")
 
 def main():
-    print("Welcome to the Riddle App!")
-    play_riddle_game()
+    st.title("Riddle App")
+    st.write("Welcome to the Riddle App!")
+    st.write("")
+
+    if st.button("Play"):
+        play_riddle_game()
 
 if __name__ == "__main__":
     main()
